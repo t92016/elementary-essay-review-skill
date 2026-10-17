@@ -1,6 +1,6 @@
 """Synthetic regression tests for the public package, not OCR accuracy tests."""
 from pathlib import Path
-import copy, hashlib, importlib.util, json, re, subprocess, sys, unittest
+import os, copy, hashlib, importlib.util, json, re, subprocess, sys, unittest
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 SKILL=ROOT/'skills/review-elementary-essays-local'
@@ -10,7 +10,7 @@ from essay import source_info, editor
 from PIL import Image, ImageDraw, ImageFont
 from docx import Document
 TEST=ROOT/'test-output/pipeline'
-FONT='C:/Windows/Fonts/msjh.ttc'
+FONT=os.environ.get('ESSAY_TEST_FONT','C:/Windows/Fonts/msjh.ttc')
 RESULTS=[]
 
 class PackageTests(unittest.TestCase):
