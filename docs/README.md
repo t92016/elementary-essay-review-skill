@@ -7,7 +7,7 @@
 - **批改操作與輸出**：[USAGE.md](USAGE.md)
 - **測試與限制**：[VALIDATION.md](VALIDATION.md)
 - **套件來源與授權**：[NOTICE.md](NOTICE.md)
-- **技能位置**：[skills/review-elementary-essays-local/SKILL.md](skills/review-elementary-essays-local/SKILL.md)
+- **技能位置**：[skills/review-elementary-essays-local/SKILL.md](skill/SKILL.md)
 
 ## 可以做什麼
 

@@ -7,6 +7,8 @@ $essayPython = 'C:/EssayReview/venv/Scripts/python.exe'
 $essaySkill = "$HOME/.agents/skills/review-elementary-essays-local"
 ```
 
+安裝後可在Codex新對話呼叫 $review-elementary-essays-local，或請OpenCode「載入review-elementary-essays-local技能批改附件作文」。OpenCode需允許skill與必要的讀檔／Python工具。使用支援看圖的模型；只支援文字的模型不能核對手寫原字。
+
 ## 1 準備原圖
 
 保留學生原檔。先看頁數、直排／橫排與既有老師註記。EXIF方向不是1時另存已旋正副本，對此新來源建立座標，不能覆寫原照。學生素材與案件輸出放技能目錄之外，例如使用者指定的案件資料夾。

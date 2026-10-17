@@ -1,0 +1,12 @@
+# Verified Windows CPU environment; install in a separate venv.
+# This does not download inference models or install Word/PDF converters.
+Pillow==12.3.0
+numpy==2.3.5
+psutil==7.2.2
+paddleocr==3.7.0
+paddlepaddle==3.3.1
+paddlex==3.7.2
+opencv-contrib-python==4.10.0.84
+
+python-docx==1.2.0
+reportlab==4.4.9
