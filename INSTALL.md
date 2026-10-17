@@ -20,6 +20,13 @@ Invoke-WebRequest "$essaySite/install.py" -OutFile "$env:TEMP/essay-skill-instal
 py -3.12 "$env:TEMP/essay-skill-install.py" --help
 ```
 
+如果Agent的網頁讀取工具暫時無法讀新Pages，但本機工具可連網，可先下載文件再讀；不是只憑網址猜安裝步驟：
+
+~~~powershell
+Invoke-WebRequest "$essaySite/INSTALL.md" -OutFile "$env:TEMP/essay-skill-INSTALL.md"
+Get-Content "$env:TEMP/essay-skill-INSTALL.md" -Raw -Encoding UTF8
+~~~
+
 此安裝器只用 Python 標準函式庫啟動，沒有 pip 前置依賴。可以先檢視程式碼。完整模式會下載約數十MB模型及較大的 Python 套件，依網路速度而異；不下載學生範例或生成式繪圖模型。
 
 ## 3 選擇全域技能目錄

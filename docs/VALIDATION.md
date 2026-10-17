@@ -4,6 +4,8 @@
 
 2026-10-17實測：20項原圖／文件回歸與7項安裝器測試通過；Windows原生x64、Python3.12.13的全新隔離環境完成依賴與官方模型安裝。有上限mobile OCR在合成圖完成4個候選區域，22.11秒、RSS高峰433.9MiB。合成4頁Word及6頁PDF均已預覽。這些不是手寫錯字準確率。
 
+另外已從正式公開HTTPS Pages在第二個新隔離目錄完成完整安裝，不使用GitHub登入；ZIP24檔CRC／SHA、75項Windows依賴、兩個模型雜湊與合成圖片／Word／PDF自測均通過。14個公開文件及程式入口已以HTTP200核對。原本全域技能與工作區本機定稿前後雜湊一致。
+
 完整結果見validation/release-verification.json（Pages副本為validation.json）。安裝器只在配置與合成自測成功後建立全域技能；安裝後仍需Agent實際看圖及用使用者照片驗收。
 
 ## 必須分開看的結果

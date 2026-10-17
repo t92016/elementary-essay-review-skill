@@ -49,5 +49,22 @@
     "non-Windows guarded OCR",
     "teacher-labelled real typo accuracy"
   ],
-  "public_https_download_checked": false
+  "public_https_download_checked": true,
+  "public_full_install": {
+    "pass": true,
+    "github_auth_used": false,
+    "source": "https://t92016.github.io/elementary-essay-review-skill/",
+    "mode": "full",
+    "agent_target_profile": "codex, isolated explicit destination",
+    "archive_sha256": "7fb8cb71431fb51c696d3f9cc54c1030217ce1a171b0e2694655d8b9329f58a2",
+    "configuration_pass": true,
+    "self_test_pass": true,
+    "pdf_generated": true,
+    "models_hashes_verified": true
+  },
+  "public_resources_checked": 14,
+  "local_skill_files_compared": {
+    "global": 17,
+    "workspace": 24
+  }
 }
