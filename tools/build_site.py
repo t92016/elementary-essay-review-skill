@@ -1,0 +1,84 @@
+"""Build the static Pages site and deterministic versioned skill archive."""
+from pathlib import Path
+import hashlib,json,zipfile,io
+ROOT=Path(__file__).resolve().parents[1]
+NAME="review-elementary-essays-local"
+VERSION="1.0.0"
+SITE="https://t92016.github.io/elementary-essay-review-skill/"
+def build():
+ skill=ROOT/"skills"/NAME;docs=ROOT/"docs";(docs/"downloads").mkdir(parents=True,exist_ok=True)
+ files=[p for p in sorted(skill.rglob("*")) if p.is_file() and "__pycache__" not in p.parts]
+ for p in files:
+  if p.suffix in (".py",".txt",".md",".json",".html") or p.name=="LICENSE":
+   p.write_text(p.read_text(encoding="utf-8").replace("\r\n","\n"),encoding="utf-8",newline="\n")
+ archive=docs/"downloads"/(NAME+"-"+VERSION+".zip")
+ buffer=io.BytesIO()
+ with zipfile.ZipFile(buffer,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for p in files:
+   info=zipfile.ZipInfo(NAME+"/"+p.relative_to(skill).as_posix(),(2026,10,17,0,0,0))
+   info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
+   z.writestr(info,p.read_bytes())
+ raw=buffer.getvalue();archive.write_bytes(raw)
+ assert archive.read_bytes()==raw
+ manifest={"schema_version":1,"name":NAME,"version":VERSION,
+           "archive":"downloads/"+archive.name,"bytes":len(raw),
+           "sha256":hashlib.sha256(raw).hexdigest(),
+           "files":{p.relative_to(skill).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
+ (docs/"downloads/release.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
+ for name in ("README.md","INSTALL.md","USAGE.md","VALIDATION.md","NOTICE.md","LICENSE","install.py"):
+  (docs/name).write_bytes((ROOT/name).read_bytes())
+ (docs/"models.json").write_bytes((skill/"references/mobile-models.json").read_bytes())
+ if (ROOT/"validation/release-verification.json").is_file():
+  (docs/"validation.json").write_bytes((ROOT/"validation/release-verification.json").read_bytes())
+ (docs/"agent.json").write_text(json.dumps({"name":NAME,"version":VERSION,"entry":SITE+"INSTALL.md",
+  "usage":SITE+"USAGE.md","manifest":SITE+"downloads/release.json","models":SITE+"models.json",
+  "installer":SITE+"install.py","runtime":"local, not GitHub Pages","full_platform":"Windows native x64 Python 3.12",
+  "no_overwrite":True,"photo_upload_endpoint":None},indent=2),encoding="utf-8")
+ (docs/".nojekyll").write_text("",encoding="utf-8")
+ (docs/"index.html").write_text("""<!doctype html>
+<html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>國小作文批改小老師｜本機 Agent Skill</title>
+<meta name="description" content="由Codex桌面版製作，供Codex與OpenCode安裝的本機作文批改技能。核對原文與座標，再產生紅筆圈線、佳句理由、修改例句與Word/PDF。">
+<style>
+:root{color-scheme:light;--ink:#162e35;--red:#b72235;--line:#dbe5e5}
+*{box-sizing:border-box}body{margin:0;background:#f5f8f7;color:var(--ink);font:17px/1.8 system-ui,"Microsoft JhengHei",sans-serif}
+main{max-width:1100px;margin:auto;padding:55px 28px}header{background:#153b43;color:white;border-radius:20px;padding:42px}
+h1{font-size:clamp(29px,5vw,45px);line-height:1.4;margin:8px 0 12px}h2{font-size:25px;margin-top:36px}h3{font-size:19px}
+.tag{letter-spacing:.1em;color:#bfe1db}header p{max-width:760px;color:#e1efed}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}a{color:#0d6164;text-underline-offset:4px}
+.actions a{padding:10px 20px;background:white;color:#153b43;border-radius:8px;text-decoration:none;font-weight:650}
+.actions a:first-child{background:#f7cf65}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.card{background:white;padding:25px;border:1px solid var(--line);border-radius:12px}.card h3{color:var(--red);margin:0 0 8px}
+.panel{background:white;padding:28px;border:1px solid var(--line);border-radius:12px;margin:24px 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3f2;padding:18px;border-radius:8px;font:15px/1.9 ui-monospace,monospace}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}
+small,footer{color:#536a70}.links{display:flex;gap:20px;flex-wrap:wrap}footer{border-top:1px solid var(--line);padding-top:20px;margin-top:40px}
+@media(max-width:750px){main{padding:22px 16px}header{padding:26px}.grid{grid-template-columns:1fr}.panel{padding:20px}}
+</style><main>
+<header><div class="tag">CODEX 製作 · 本機執行 · AGENT SKILL</div>
+<h1>國小作文批改小老師</h1><p>保留學生原字，先核對原文與座標，再加上紅筆圈選、佳句波浪線、修改建議與具體講評。</p>
+<small style="color:#cfe3df">版本 1.0.0 · 完整OCR：Windows 原生 x64 / Python 3.12 · Codex / OpenCode</small>
+<div class="actions"><a href="INSTALL.md">Agent 安裝流程</a><a href="downloads/review-elementary-essays-local-1.0.0.zip">下載完整技能 ZIP</a><a href="https://github.com/t92016/elementary-essay-review-skill">GitHub 原始碼</a></div></header>
+<div class="grid"><article class="card"><h3>訂正有證據</h3>圈選核對過的原字，旁邊用紅字寫正字；疑字先列待確認，不把OCR誤讀當學生錯字。</article>
+<article class="card"><h3>佳句說明好在哪裡</h3>沿原句畫波浪線，說明細節、觀察或修辭的作用；不只給一句「很棒」。</article>
+<article class="card"><h3>修改附理由與例句</h3>括線標示需改句，提供問題、修改方向與保留原意的參考寫法。</article></div>
+<section class="panel"><h2 style="margin-top:0">把這段交給對方的 Agent</h2>
+<pre>請讀取 https://t92016.github.io/elementary-essay-review-skill/INSTALL.md
+將「國小作文批改小老師」安裝到我的 Codex 或 OpenCode 全域技能。
+保留已存在技能，建立獨立環境、下載固定官方 mobile 模型並核對SHA。
+安裝後執行配置檢查與合成自測，再按 USAGE.md 用我的原圖核對座標和批註。
+不要重畫學生文字，也不要把尚未完成的測試說成通過。</pre>
+<p>Agent需要本機讀檔、看圖與Python執行工具。Pages本身是靜態安裝入口，不會在網頁裡執行OCR，也不接收作文照片。</p></section>
+<h2>安裝後可以取得什麼</h2><table><thead><tr><th>輸出</th><th>內容</th></tr></thead><tbody>
+<tr><td>原圖紅筆PNG</td><td>錯字圈、近旁紅字、佳句波浪線、修改括線；新增批註以外的原圖像素保留。</td></tr>
+<tr><td>講評與修改</td><td>完整原句、理由、修改例；長說明放圖外旁欄與文件。</td></tr>
+<tr><td>可調整資料</td><td>JSON、原字裁切、透明層、離線HTML工作台，可移動圈線與紅字後重產。</td></tr>
+<tr><td>Word與PDF</td><td>依同份核對資料產生；需要可用字型，產生後仍需逐頁預覽。</td></tr></tbody></table>
+<h2>固定模型與下載</h2><p>安裝器依<a href="models.json">官方模型清單與SHA</a>直接下載兩個PP-OCRv5 mobile模型，不把大型模型放進Git。安裝依賴來自PyPI，模型來自Paddle官方HTTPS主機。</p>
+<ul><li><a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0/PP-OCRv5_mobile_det_infer.tar">Mobile偵測模型</a></li>
+<li><a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0/PP-OCRv5_mobile_rec_infer.tar">Mobile辨識模型</a></li></ul>
+<h2>操作、驗收與支援範圍</h2><p>Windows完整模式沿用有上限的CPU低負載流程。其他系統提供core疊圖與文件流程；尚未宣稱跨平台OCR或所有Agent模型的批改品質已驗證。安裝成功、OCR完成、原文判斷正確與版面通過是分開的驗收。</p>
+<div class="links"><a href="README.md">完整說明</a><a href="INSTALL.md">安裝MD</a><a href="USAGE.md">批改操作MD</a><a href="VALIDATION.md">驗收與限制</a><a href="downloads/release.json">版本與SHA清單</a><a href="agent.json">Agent入口JSON</a><a href="NOTICE.md">來源與授權</a></div>
+<footer>由t92016透過Codex桌面版製作。自行撰寫的程式與文件採<a href="LICENSE">MIT授權</a>；第三方軟體、模型與字型依各自授權。<br>不附學生照片、私人成品、開發機環境或憑證。</footer></main></html>""",encoding="utf-8")
+ print(json.dumps({"version":VERSION,"files":len(files),"zip_bytes":manifest["bytes"],"sha256":manifest["sha256"]}))
+if __name__=="__main__":build()

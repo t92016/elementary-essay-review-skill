@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-17",
+  "version": "1.0.0",
+  "platform": "Windows native x64",
+  "python": "3.12.13",
+  "unit_regressions": {
+    "pipeline": 20,
+    "installer": 7,
+    "pass": true
+  },
+  "fresh_isolated_install": {
+    "pass": true,
+    "source": "loopback HTTP replica of Pages files",
+    "global_skills_modified": false
+  },
+  "models": {
+    "PP-OCRv5_mobile_det_infer": {
+      "status": "downloaded_verified",
+      "download_bytes": 4935680,
+      "hashes_verified": true
+    },
+    "PP-OCRv5_mobile_rec_infer": {
+      "status": "downloaded_verified",
+      "download_bytes": 16834560,
+      "hashes_verified": true
+    }
+  },
+  "bounded_mobile_ocr": {
+    "status": "completed",
+    "exit_code": 0,
+    "seconds": 22.11,
+    "peak_rss_mb": 433.9,
+    "rss_limit_mb": 1200,
+    "minimum_available_limit_mb": 2500,
+    "timeout_seconds": 180
+  },
+  "ocr_regions": 4,
+  "confirmed_student_typos_in_synthetic_ocr": 0,
+  "visual_review": {
+    "pipeline_docx_pages": 4,
+    "pipeline_pdf_pages": 6,
+    "all_pages_viewed": true,
+    "site_desktop_preview": "1280px headless Chrome"
+  },
+  "original_global_and_workspace_skills_unchanged": true,
+  "not_validated": [
+    "another physical computer",
+    "OpenCode agent end-to-end behavior",
+    "non-Windows guarded OCR",
+    "teacher-labelled real typo accuracy"
+  ],
+  "public_https_download_checked": false
+}

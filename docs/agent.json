@@ -1,0 +1,13 @@
+{
+  "name": "review-elementary-essays-local",
+  "version": "1.0.0",
+  "entry": "https://t92016.github.io/elementary-essay-review-skill/INSTALL.md",
+  "usage": "https://t92016.github.io/elementary-essay-review-skill/USAGE.md",
+  "manifest": "https://t92016.github.io/elementary-essay-review-skill/downloads/release.json",
+  "models": "https://t92016.github.io/elementary-essay-review-skill/models.json",
+  "installer": "https://t92016.github.io/elementary-essay-review-skill/install.py",
+  "runtime": "local, not GitHub Pages",
+  "full_platform": "Windows native x64 Python 3.12",
+  "no_overwrite": true,
+  "photo_upload_endpoint": null
+}
