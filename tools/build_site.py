@@ -25,7 +25,7 @@ def build():
            "sha256":hashlib.sha256(raw).hexdigest(),
            "files":{p.relative_to(skill).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
  (docs/"downloads/release.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
- for name in ("README.md","INSTALL.md","USAGE.md","VALIDATION.md","NOTICE.md","LICENSE","install.py"):
+ for name in ("README.md","INSTALL.md","USAGE.md","VALIDATION.md","SYNC.md","NOTICE.md","LICENSE","install.py"):
   (docs/name).write_bytes((ROOT/name).read_bytes())
  for source in files:
   target=docs/"skill"/source.relative_to(skill)
@@ -83,7 +83,7 @@ small,footer{color:#536a70}.links{display:flex;gap:20px;flex-wrap:wrap}footer{bo
 <ul><li><a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0/PP-OCRv5_mobile_det_infer.tar">Mobile偵測模型</a></li>
 <li><a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0/PP-OCRv5_mobile_rec_infer.tar">Mobile辨識模型</a></li></ul>
 <h2>操作、驗收與支援範圍</h2><p>Windows完整模式沿用有上限的CPU低負載流程。其他系統提供core疊圖與文件流程；尚未宣稱跨平台OCR或所有Agent模型的批改品質已驗證。安裝成功、OCR完成、原文判斷正確與版面通過是分開的驗收。</p>
-<div class="links"><a href="README.md">完整說明</a><a href="skill/SKILL.md">完整 Skill 指令</a><a href="INSTALL.md">安裝MD</a><a href="USAGE.md">批改操作MD</a><a href="VALIDATION.md">驗收與限制</a><a href="downloads/release.json">版本與SHA清單</a><a href="agent.json">Agent入口JSON</a><a href="NOTICE.md">來源與授權</a></div>
+<div class="links"><a href="README.md">完整說明</a><a href="skill/SKILL.md">完整 Skill 指令</a><a href="INSTALL.md">安裝MD</a><a href="USAGE.md">批改操作MD</a><a href="SYNC.md">版本同步</a><a href="VALIDATION.md">驗收與限制</a><a href="downloads/release.json">版本與SHA清單</a><a href="agent.json">Agent入口JSON</a><a href="NOTICE.md">來源與授權</a></div>
 <footer>由t92016透過Codex桌面版製作。自行撰寫的程式與文件採<a href="LICENSE">MIT授權</a>；第三方軟體、模型與字型依各自授權。<br>不附學生照片、私人成品、開發機環境或憑證。</footer></main></html>""",encoding="utf-8")
  print(json.dumps({"version":VERSION,"files":len(files),"zip_bytes":manifest["bytes"],"sha256":manifest["sha256"]}))
 if __name__=="__main__":build()

@@ -1,0 +1,62 @@
+name: Sync essay release from public source
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+permissions:
+  contents: write
+env:
+  PYTHONUTF8: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+concurrency:
+  group: essay-release-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          path: mirror
+          ref: main
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: t92016/elementary-essay-review-skill
+          ref: codex/public-release
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verify and synchronize committed release
+        run: python source/tools/sync_private.py --target mirror --write
+      - name: Detect changes
+        id: changes
+        run: |
+          git -C mirror diff --quiet
+          if ($LASTEXITCODE -gt 1) { throw "Unable to inspect mirror" }
+          $changed = ($LASTEXITCODE -eq 1) -or ((git -C mirror ls-files --others --exclude-standard).Count -gt 0)
+          "needed=$($changed.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          exit 0
+      - name: Install test dependencies
+        if: steps.changes.outputs.needed == 'true'
+        run: python -m pip install -r source/skills/review-elementary-essays-local/requirements-core.txt
+      - name: Test source and mirrored release
+        if: steps.changes.outputs.needed == 'true'
+        run: |
+          python -B -m unittest discover -s source/tests -v
+          if ($LASTEXITCODE -ne 0) { throw "Release tests failed" }
+          python source/tools/sync_private.py --target mirror
+          if ($LASTEXITCODE -ne 0) { throw "Mirror verification failed" }
+      - name: Commit verified mirror
+        if: steps.changes.outputs.needed == 'true'
+        working-directory: mirror
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- skills/review-elementary-essays-local packages/elementary-essay-review-skill manifest/essay-release.json manifest/skills.json
+          git commit -m "Sync verified essay skill from public release"
+          if ($LASTEXITCODE -ne 0) { throw "Commit failed" }
+          git push origin HEAD:main
+          if ($LASTEXITCODE -ne 0) { throw "Push failed; preserve latest remote changes" }

@@ -76,3 +76,13 @@ core 需要Python 3.10+、Pillow、python-docx、ReportLab及可用中文字型�
 - 不把「這台配置通過」說成其他電腦、所有字跡或所有模型已驗證。
 
 如果只是手動從GitHub下載技能資料夾，仍須自行完成依賴、模型、字型、自測與安裝記錄，不能省略。
+
+## 7 從私人 Codex-Skills 備份安裝
+
+私人 repo 包含相同版本的技能與完整安裝專案。先讀 [SYNC.md](SYNC.md)，並於私人 checkout 根目錄執行：
+
+~~~powershell
+py -3.12 packages/elementary-essay-review-skill/tools/install_from_checkout.py --agent codex --runtime C:/EssayReview
+~~~
+
+此入口讀取 checkout 內的相同 ZIP，不需從公開 Pages 下載技能包；仍需聯網安裝套件及官方模型。不要先用一般 Install-CodexSkills.ps1 複製本技能，也不要在已有同名技能時強制覆寫。直接 clone 本公開 repo 時，可用 tools/install_from_checkout.py 呼叫相同入口。

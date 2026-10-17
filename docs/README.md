@@ -5,6 +5,7 @@
 - **分享與安裝入口**：https://t92016.github.io/elementary-essay-review-skill/
 - **Agent 請先讀完整安裝流程**：[INSTALL.md](INSTALL.md)
 - **批改操作與輸出**：[USAGE.md](USAGE.md)
+- **公開與私人備份同步**：[SYNC.md](SYNC.md)
 - **測試與限制**：[VALIDATION.md](VALIDATION.md)
 - **套件來源與授權**：[NOTICE.md](NOTICE.md)
 - **技能位置**：[skills/review-elementary-essays-local/SKILL.md](skill/SKILL.md)
